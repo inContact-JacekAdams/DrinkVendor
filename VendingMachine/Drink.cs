@@ -9,6 +9,7 @@ namespace VendingMachine
     public abstract class Drink
     {
         public string DrinkName { get; set; }
+        //I could have picked a boolean here but then I'd have to parse it to and from "not carbonated" and "carbonated." Simpler = better
         protected string CarbonatedString { get; set; }
         abstract public string GetDescription();
     }
@@ -17,13 +18,10 @@ namespace VendingMachine
         int ABV;
         public override string GetDescription()
         {
-
             string description = DrinkName + ", " + CarbonatedString + ", " + ABV + "%.";
 
             return description;
         }
-
-        public Beer() { }
         public Beer(string name, string carbonated, int abv)
         {
             DrinkName = name;
@@ -36,7 +34,6 @@ namespace VendingMachine
         private string FruitName;
         public override string GetDescription()
         {
-
             string description = DrinkName + ", " + CarbonatedString + ", made from " + FruitName + ".";
 
             return description; throw new NotImplementedException();
@@ -59,7 +56,6 @@ namespace VendingMachine
         }
         public override string GetDescription()
         {
-
             string description = DrinkName + ", " + CarbonatedString + ". ";
 
             return description;

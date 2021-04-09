@@ -13,27 +13,29 @@ namespace VendingMachine
             char[] alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".ToCharArray();
             for (int i = 0; i < drinkList.Count; i++)
             {
-                Console.WriteLine(alphabet[i] + i + ": " + drinkList[i].DrinkName);
+                Console.WriteLine(alphabet[i].ToString() + i + ": " + drinkList[i].DrinkName);
             }
 
-            string vendString = Console.ReadLine();
+            
             Drink vendItem = null;
             while (vendItem == null)
             {
+                string vendString = Console.ReadLine();
                 //This is far from the quickest verification method but I wanted to show off a little 
-                Regex vendPattern = new Regex("[A,B,C]([1,2,3])");
+                Regex vendPattern = new Regex("[A,B,C]([0,1,2])");
                 Match vendMatch = vendPattern.Match(vendString);
 
                 while (!vendMatch.Success)
                 {
-                    Console.WriteLine("Item ID not recognized. Please enter a valid item code A1, B2, or C3");
+                    Console.WriteLine("Item ID not recognized. Please enter a valid item code A0, B1, or C2");
                     vendString = Console.ReadLine();
                     vendMatch = vendPattern.Match(vendString);
                 }
-                Int32.TryParse(vendMatch.Groups[1].Value, out int vendID);
+                //TECHNICALLY There's a bug here where a user can type "A2" and select budweiser. I'm leaving this as a "feature" so I can show capture grouping.
+                Int32.TryParse(vendMatch.Groups[1].Value, out int vendID);      
                 Drink maybeVend = drinkList[vendID];
 
-                Console.WriteLine("Selected " + vendItem.GetDescription());
+                Console.WriteLine("Selected " + maybeVend.GetDescription());
                 Console.WriteLine("Vend? Y/N");
 
                 string confirm = Console.ReadLine();
@@ -48,6 +50,9 @@ namespace VendingMachine
                     case "N":
                         Console.WriteLine("Cancelled. Please make another selection");
                         break;
+                    default:
+                        Console.WriteLine("Vend cancelled. Please respond with Y/N next time. Make another selection.");
+                            break;
                 }
             }
 
@@ -61,10 +66,14 @@ namespace VendingMachine
                     Console.WriteLine("Could not read age. Please re-enter in MM/DD/YYYY format.");
                     ageString = Console.ReadLine();
                 }
-                TimeSpan ageDifference = userDOB - DateTime.Now;
+                TimeSpan ageDifference = DateTime.Now - userDOB;
                 if (ageDifference.TotalDays < 7665) //7665 days in 21 years
                 {
                     Console.WriteLine("Unauthorized purchase. You are too young to be drinking alcohol. Local authorities have been alerted and are on their way. Goodbye!");
+                }
+                else
+                {
+                    Console.WriteLine("Enjoy your ice cold beer, and please remember to recycle!");
                 }
             }
             else
